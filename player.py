@@ -1,3 +1,5 @@
+import math
+
 from settings import *
 import pygame
 
@@ -13,15 +15,21 @@ class Player:
 
     def movement(self):
         keys = pygame.key.get_pressed()
+        sin_a = math.sin(self.angle)
+        cos_a = math.cos(self.angle)
         if keys[pygame.K_w]:
-            self.y -= PLAYER_SPEED
+            self.x += PLAYER_SPEED * cos_a
+            self.y += PLAYER_SPEED * sin_a
         if keys[pygame.K_s]:
-            self.y += PLAYER_SPEED
+            self.x -= PLAYER_SPEED * cos_a
+            self.y -= PLAYER_SPEED * sin_a
         if keys[pygame.K_a]:
-            self.x -= PLAYER_SPEED
-        if keys[pygame.K_d]:
-            self.x += PLAYER_SPEED
-        if keys[pygame.K_q]:
             self.angle -= PLAYER_VIEW_ANGLE_SPEED
-        if keys[pygame.K_e]:
+        if keys[pygame.K_d]:
             self.angle += PLAYER_VIEW_ANGLE_SPEED
+        if keys[pygame.K_q]:
+            self.x += PLAYER_SPEED * sin_a
+            self.y -= PLAYER_SPEED * cos_a
+        if keys[pygame.K_e]:
+            self.x -= PLAYER_SPEED * sin_a
+            self.y += PLAYER_SPEED * cos_a

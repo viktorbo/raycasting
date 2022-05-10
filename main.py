@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from player import Player
+from map import world_map
 import math
 
 pygame.init()
@@ -27,8 +28,14 @@ while True:
         surface=screen,
         color=COLOR_RED,
         start_pos=player.position,
-        end_pos=(player.x + PLAYER_RAY_DISTANCE * math.cos(player.angle),
-                 player.y + PLAYER_RAY_DISTANCE * math.sin(player.angle))
+        end_pos=(player.x + RAY_DISTANCE * math.cos(player.angle),
+                 player.y + RAY_DISTANCE * math.sin(player.angle))
     )
+    for x, y in world_map:
+        pygame.draw.rect(surface=screen,
+                         color=COLOR_BLUE,
+                         rect=(x, y, TILE_SIZE, TILE_SIZE),
+                         width=2
+        )
     pygame.display.flip()
     clock.tick(WINDOW_FPS)
