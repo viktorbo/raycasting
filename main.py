@@ -1,12 +1,12 @@
 import pygame
 from settings import *
 from player import Player
-from map import world_map
 import math
+from map import world_map
+from ray_casting import ray_casting
 
 pygame.init()
-
-screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+sc = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 player = Player()
 
@@ -14,28 +14,20 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
-
-    screen.fill(COLOR_BLACK)
-
     player.movement()
-    pygame.draw.circle(
-        surface=screen,
-        color=COLOR_GREEN,
-        center=player.position,
-        radius=PLAYER_CIRCLE_RADIUS
-    )
-    pygame.draw.line(
-        surface=screen,
-        color=COLOR_RED,
-        start_pos=player.position,
-        end_pos=(player.x + RAY_DISTANCE * math.cos(player.angle),
-                 player.y + RAY_DISTANCE * math.sin(player.angle))
-    )
+    sc.fill(BLACK)
+
+    pygame.draw.rect(sc, BLUE, (0, 0, WIDTH, HALF_HEIGHT))
+    pygame.draw.rect(sc, BLUE, (0, HALF_HEIGHT, WIDTH, HALF_HEIGHT))
+
+    ray_casting(sc, player.pos, player.angle)
+
+    pygame.draw.circle(sc, GREEN, (int(player.x), int(player.y)), 12)
+    pygame.draw.line(sc, GREEN, player.pos, (player.x + WIDTH * math.cos(player.angle),
+                                             player.y + WIDTH * math.sin(player.angle)), 2)
     for x, y in world_map:
-        pygame.draw.rect(surface=screen,
-                         color=COLOR_BLUE,
-                         rect=(x, y, TILE_SIZE, TILE_SIZE),
-                         width=2
-        )
+        pygame.draw.rect(sc, DARKGRAY, (x, y, TILE, TILE), 2)
+
     pygame.display.flip()
-    clock.tick(WINDOW_FPS)
+    clock.tick(FPS)
+    print(clock.get_fps())
